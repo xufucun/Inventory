@@ -16,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //这个不算使用外部库
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

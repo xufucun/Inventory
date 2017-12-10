@@ -16,7 +16,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditorActivity"></activity>
+        <activity
+            android:name=".EditorActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <provider
+            android:name=".data.InventoryProvider"
+            android:authorities="cn.xufucun.udacity.inventory"
+            android:exported="false" />
+
+        <activity android:name=".InfoActivity"
+            android:label="商品信息"></activity>
     </application>
 
 </manifest>

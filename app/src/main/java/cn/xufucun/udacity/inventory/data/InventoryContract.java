@@ -29,17 +29,16 @@ public final class InventoryContract {
         public final static String TABLE_NAME = "inventory";
 
         public final static String _ID = BaseColumns._ID;  //ID INTEGER
-        public final static String COLUMN_INVENTORY_IMAGE ="image";//图片 BLOB
+//        public final static String COLUMN_INVENTORY_IMAGE ="image";//图片 BLOB //还是算了吧
         public final static String COLUMN_INVENTORY_NAME ="name"; //商品名称 TEXT
-        public final static String COLUMN_INVENTORY_BARCODE ="barcode"; //条形码 TEXT
-        public final static String COLUMN_INVENTORY_PRICE ="price";//单价 INTEGER
         public final static String COLUMN_INVENTORY_QUANTITY ="quantity";//数量 INTEGER
-        public final static String COLUMN_INVENTORY_SUPPLIER ="supplier";//供应商 TEXT
-        public final static String COLUMN_INVENTORY_CONTACT ="contact";//联系人 TEXT
-        public final static String COLUMN_INVENTORY_PHONENUMBER ="phoneNumber"; //手机号 TEXT
-        public final static String COLUMN_INVENTORY_EMAIL ="email";  //邮箱 TEXT
+        public final static String COLUMN_INVENTORY_PRICE ="price";//单价 INTEGER
+        public final static String COLUMN_INVENTORY_BARCODE ="barcode"; //条形码 TEXT
 
-
+        public final static String COLUMN_SUPPLIER_NAME ="supplier";//供应商 TEXT
+        public final static String COLUMN_SUPPLIER_CONTACT ="contact";//联系人 TEXT
+        public final static String COLUMN_SUPPLIER_PHONE_NUMBER ="phoneNumber"; //手机号 TEXT
+        public final static String COLUMN_SUPPLIER_EMAIL ="email";  //邮箱 TEXT
 
     }
 }
