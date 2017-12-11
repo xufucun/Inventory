@@ -33,13 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_goods_name"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/margin_16dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="@dimen/text_size_20sp"
                 android:text="商品剩余数量：" />
 
             <TextView
@@ -47,6 +48,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="@dimen/text_size_20sp"
+                android:textColor="@android:color/black"
                 tools:text="100" />
 
         </LinearLayout>
@@ -61,7 +64,7 @@
                 android:id="@+id/layout_edit_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_margin="@dimen/margin_4dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -69,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_margin="4dp"
+                    android:layout_margin="@dimen/margin_4dp"
                     android:background="@android:color/holo_blue_dark"
                     android:textColor="@android:color/white"
                     android:text="-1" />
@@ -78,17 +81,17 @@
                     android:id="@+id/btn_quantity_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
+                    android:layout_margin="@dimen/margin_4dp"
                     android:background="@android:color/holo_blue_dark"
                     android:textColor="@android:color/white"
                     android:layout_weight="1"
-                    android:text="编辑" />
+                    android:text="@string/btn_editor" />
 
                 <Button
                     android:id="@+id/btn_quantity_plus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
+                    android:layout_margin="@dimen/margin_4dp"
                     android:background="@android:color/holo_blue_dark"
                     android:textColor="@android:color/white"
                     android:layout_weight="1"
@@ -100,28 +103,19 @@
                 android:id="@+id/btn_subscribe_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/margin_8dp"
                 android:background="@android:color/holo_green_dark"
                 android:textColor="@android:color/white"
-                android:text="电话订购" />
-
-            <Button
-                android:id="@+id/btn_subscribe_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@android:color/holo_green_dark"
-                android:textColor="@android:color/white"
-                android:text="联系邮箱" />
+                android:text="@string/btn_subscribe" />
 
             <Button
                 android:id="@+id/btn_delete_goods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/margin_8dp"
                 android:background="@android:color/holo_red_dark"
                 android:textColor="@android:color/white"
-                android:text="删除商品" />
+                android:text="@string/btn_delete_goods" />
 
         </LinearLayout>
 

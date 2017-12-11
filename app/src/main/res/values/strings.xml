@@ -5,10 +5,14 @@
     <string name="goods_price">商品单价</string>
     <string name="yuan">元</string>
     <string name="goods_quantity">商品数量</string>
-    <string name="goods_barcode">商品条形码</string>
+    <string name="goods_barcode">商品编码</string>
     <string name="supplier_info">供应商信息</string>
     <string name="supplier_name">供应商名称</string>
     <string name="supplier_contact">联系人</string>
     <string name="supplier_phone_number">联系电话</string>
     <string name="supplier_email">联系邮箱</string>
+    <string name="no_data">暂时没有货物，点击右下角，添加一条数据。</string>
+    <string name="btn_editor">编辑</string>
+    <string name="btn_subscribe">订购更多</string>
+    <string name="btn_delete_goods">删除商品</string>
 </resources>

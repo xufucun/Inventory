@@ -19,17 +19,15 @@ public class InventoryProvider extends ContentProvider{
 
     private static final String TAG = "InventoryProvider";
 
-    /** 宠物表的内容URI的URI匹配器代码 */
-    private static final int PETS = 100;
+    private static final int INVENTORYS = 100;
 
-    /** 宠物表中单个宠物的内容URI的URI匹配器代码 */
-    private static final int PET_ID = 101;
+    private static final int INVENTORY_ID = 101;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, PETS);
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", PET_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, INVENTORYS);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", INVENTORY_ID);
     }
 
     private InventoryDbHelper mDbHelper;
@@ -49,10 +47,10 @@ public class InventoryProvider extends ContentProvider{
 
         switch (match){
 
-            case PETS:
+            case INVENTORYS:
                 cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
-            case PET_ID:
+            case INVENTORY_ID:
 
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
@@ -74,9 +72,9 @@ public class InventoryProvider extends ContentProvider{
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case INVENTORYS:
                 return InventoryEntry.CONTENT_LIST_TYPE;
-            case PET_ID:
+            case INVENTORY_ID:
                 return InventoryEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
@@ -87,8 +85,8 @@ public class InventoryProvider extends ContentProvider{
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                return insertPet(uri, contentValues);
+            case INVENTORYS:
+                return insertGoods(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -101,12 +99,10 @@ public class InventoryProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case PETS:
-                // Delete all rows that match the selection and selection args
+            case INVENTORYS:
                 rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case PET_ID:
-                // Delete a single row given by the ID in the URI
+            case INVENTORY_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
@@ -127,12 +123,9 @@ public class InventoryProvider extends ContentProvider{
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case INVENTORYS:
                 return updatePet(uri, contentValues, selection, selectionArgs);
-            case PET_ID:
-                // For the PET_ID code, extract out the ID from  the URI,
-                // so we know which row to update. Selection will be "_id=?" and selection
-                // arguments will be a String array containing the actual ID.
+            case INVENTORY_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updatePet(uri, contentValues, selection, selectionArgs);
@@ -143,46 +136,32 @@ public class InventoryProvider extends ContentProvider{
 
 
 
-    private Uri insertPet(Uri uri, ContentValues values) {
+    private Uri insertGoods(Uri uri, ContentValues values) {
 
         String gName = values.getAsString(InventoryEntry.COLUMN_INVENTORY_NAME);
         if (gName == null) {
-            throw new IllegalArgumentException("Inventory requires a name");
+            throw new IllegalArgumentException("名称输入有误");
         }
 
         Integer gQUantity = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
         if (gQUantity == null) {
-            throw new IllegalArgumentException("Inventory requires a name");
+            throw new IllegalArgumentException("数量输入有误");
         }
 
         Integer gPrice = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
         if (gPrice == null) {
-            throw new IllegalArgumentException("Inventory requires a name");
+            throw new IllegalArgumentException("价格输入有误");
         }
 
-        String gBarcode = values.getAsString(InventoryEntry.COLUMN_INVENTORY_BARCODE);
-        if (gBarcode == null) {
-            throw new IllegalArgumentException("Inventory requires a name");
-        }
 
         String sName = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_NAME);
         if (sName == null) {
-            throw new IllegalArgumentException("Inventory requires a name");
-        }
-
-        String sContact = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_CONTACT);
-        if (sContact == null) {
-            throw new IllegalArgumentException("Pet requires valid gender");
+            throw new IllegalArgumentException("供应输入有误");
         }
 
         String sPhoneNumber = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
         if (sPhoneNumber == null) {
-            throw new IllegalArgumentException("Pet requires valid weight");
-        }
-
-        String sEmail = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_EMAIL);
-        if (sEmail == null ) {
-            throw new IllegalArgumentException("Pet requires valid weight");
+            throw new IllegalArgumentException("电话输入有误");
         }
 
 
@@ -204,56 +183,36 @@ public class InventoryProvider extends ContentProvider{
         if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_NAME)) {
             String name = values.getAsString(InventoryEntry.COLUMN_INVENTORY_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("名称输入有误");
             }
         }
 
         if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_QUANTITY)) {
             Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
             if (quantity == null) {
-                throw new IllegalArgumentException("Pet requires valid gender");
+                throw new IllegalArgumentException("数量输入有误");
             }
         }
 
         if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_PRICE)) {
             Integer price = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
             if (price == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+                throw new IllegalArgumentException("价格输入有误");
             }
         }
 
-        if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_BARCODE)) {
-            String barcode = values.getAsString(InventoryEntry.COLUMN_INVENTORY_BARCODE);
-            if (barcode == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
-            }
-        }
 
         if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_NAME)) {
             String name = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_NAME);
             if (name == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
-            }
-        }
-
-        if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_CONTACT)) {
-            String contact = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_CONTACT);
-            if (contact == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+                throw new IllegalArgumentException("供应商输入有误");
             }
         }
 
         if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
             String phone = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
             if (phone == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
-            }
-        }
-
-        if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_EMAIL)) {
-            String email = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_EMAIL);
-            if (email == null ) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+                throw new IllegalArgumentException("电话输入有误");
             }
         }
 

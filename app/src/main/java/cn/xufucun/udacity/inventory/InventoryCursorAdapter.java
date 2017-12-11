@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 import cn.xufucun.udacity.inventory.data.InventoryContract.InventoryEntry;
 
 /**
@@ -40,9 +42,12 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String goodsPrice = cursor.getString(priceColumnIndex);
         String goodsQuantity = cursor.getString(quantityColumnIndex);
 
+        DecimalFormat df   = new DecimalFormat("#.00");
+        String price = df.format(Float.valueOf(goodsPrice)/100);
+
         tvGoodsName.setText(goodsName);
-        tvGoodsPrice.setText(goodsPrice);
-        tvGoodsQuantity.setText(goodsQuantity);
+        tvGoodsPrice.setText("价格："+price);
+        tvGoodsQuantity.setText("剩余数量："+goodsQuantity);
 
     }
 }

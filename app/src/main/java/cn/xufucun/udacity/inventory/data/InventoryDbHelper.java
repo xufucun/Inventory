@@ -16,7 +16,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "shelter.db";
 
     //数据库版本
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // 创建一个包含SQL语句的字符串来创建账单
     private String SQL_CREATE_BILLS_TABLE = "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
@@ -24,11 +24,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             + InventoryEntry.COLUMN_INVENTORY_NAME + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_INVENTORY_QUANTITY + " INTEGER DEFAULT 0, "
             + InventoryEntry.COLUMN_INVENTORY_PRICE + " INTEGER NOT NULL, "
-            + InventoryEntry.COLUMN_INVENTORY_BARCODE + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
-            + InventoryEntry.COLUMN_SUPPLIER_CONTACT + " TEXT NOT NULL, "
-            + InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL, "
-            + InventoryEntry.COLUMN_SUPPLIER_EMAIL + " TEXT NOT NULL);";
+            + InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL);";
 
     // 创建一个包含SQL语句的字符串来删除账单
     private static final String SQL_DELETE_BILLS_TABLE = "DROP TABLE IF EXISTS " + InventoryEntry.TABLE_NAME;

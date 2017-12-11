@@ -26,12 +26,10 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ActivityInfoBinding infoBinding;
 
-    private Uri mCurrentPetUri;
-    private static final int EXISTING_PET_LOADER = 0;
+    private Uri mCurrentUri;
+    private static final int EXISTING_LOADER = 0;
 
     private String contactTel;
-    private String contactEmail;
-
 
     private int quantity;
 
@@ -41,16 +39,15 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         infoBinding = DataBindingUtil.setContentView(this, R.layout.activity_info);
 
         Intent intent = getIntent();
-        mCurrentPetUri = intent.getData();
+        mCurrentUri = intent.getData();
 
         infoBinding.btnQuantityMinus.setOnClickListener(this);
         infoBinding.btnQuantityEdit.setOnClickListener(this);
         infoBinding.btnQuantityPlus.setOnClickListener(this);
         infoBinding.btnSubscribeTel.setOnClickListener(this);
-        infoBinding.btnSubscribeEmail.setOnClickListener(this);
         infoBinding.btnDeleteGoods.setOnClickListener(this);
 
-        getLoaderManager().initLoader(EXISTING_PET_LOADER, null, this);
+        getLoaderManager().initLoader(EXISTING_LOADER, null, this);
 
     }
 
@@ -62,10 +59,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.COLUMN_INVENTORY_NAME,
                 InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,
-                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
-                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_EMAIL};
+                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,};
 
-        return new CursorLoader(this, mCurrentPetUri, projection, null, null, null);
+        return new CursorLoader(this, mCurrentUri, projection, null, null, null);
     }
 
     @Override
@@ -79,18 +75,15 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
             int gNameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_NAME);
             int gQuantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY);
             int sPhoneNuberColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-            int sEmailColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_EMAIL);
 
             String gName = cursor.getString(gNameColumnIndex);
             int gQuantity = cursor.getInt(gQuantityColumnIndex);
             String sPhoneNuber = cursor.getString(sPhoneNuberColumnIndex);
-            String sEmail = cursor.getString(sEmailColumnIndex);
 
             infoBinding.tvGoodsName.setText(gName);
             infoBinding.tvGoodsQuantity.setText(String.valueOf(gQuantity));
 
             contactTel = sPhoneNuber;
-            contactEmail = sEmail;
 
             quantity = gQuantity;
 
@@ -126,8 +119,8 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void deleteGoods() {
-        if (mCurrentPetUri != null) {
-            int rowsDeleted = getContentResolver().delete(mCurrentPetUri, null, null);
+        if (mCurrentUri != null) {
+            int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
                 Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
             } else {
@@ -160,7 +153,7 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
     private void editQuantity(int quantity){
         ContentValues values = new ContentValues();
         values.put(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,quantity);
-        int rowsAffected = getContentResolver().update(mCurrentPetUri, values, null, null);
+        int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
         if (rowsAffected == 0) {
             Toast.makeText(this, "修改失败", Toast.LENGTH_SHORT).show();
         } else {
@@ -180,7 +173,7 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (item.getItemId()) {
             case R.id.menu_edit:
                 Intent intent = new Intent(InfoActivity.this, EditorActivity.class);
-                intent.setData(mCurrentPetUri);
+                intent.setData(mCurrentUri);
                 startActivity(intent);
                 break;
             default:
@@ -209,15 +202,6 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.btn_subscribe_tel:
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contactTel));
                 startActivity(dialIntent);
-                break;
-            case R.id.btn_subscribe_email:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                // i.setType("text/plain"); //模拟器请使用这行
-                i.setType("message/rfc822"); // 真机上使用这行
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{contactEmail});
-                i.putExtra(Intent.EXTRA_SUBJECT, "您的建议");
-                i.putExtra(Intent.EXTRA_TEXT, "我们很希望能得到您的建议！！！");
-                startActivity(Intent.createChooser(i, "Select email application."));
                 break;
             case R.id.btn_delete_goods:
                 showDeleteConfirmationDialog();
