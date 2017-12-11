@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Inventory</string>
+    <string name="app_name">货物清单</string>
     <string name="goods_Info">商品信息</string>
     <string name="goods_name">商品名称</string>
     <string name="goods_price">商品单价</string>
