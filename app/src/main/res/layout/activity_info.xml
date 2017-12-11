@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="cursor"
+            type="android.database.Cursor" />
+
+        <variable
+            name="contract"
+            type="cn.xufucun.udacity.inventory.data.InventoryContract.InventoryEntry"/>
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="商品剩余数量：" />
+                android:text="商品剩余数量：" />
 
             <TextView
                 android:id="@+id/tv_goods_quantity"
@@ -50,37 +61,58 @@
                 android:id="@+id/layout_edit_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/btn_quantity_minus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:text="+1" />
+                    android:layout_margin="4dp"
+                    android:background="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/white"
+                    android:text="-1" />
 
                 <Button
+                    android:id="@+id/btn_quantity_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/white"
                     android:layout_weight="1"
-                    tools:text="编辑" />
+                    android:text="编辑" />
 
                 <Button
+                    android:id="@+id/btn_quantity_plus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/white"
                     android:layout_weight="1"
-                    tools:text="-1" />
+                    android:text="+1" />
 
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_subscribe_more"
+                android:id="@+id/btn_subscribe_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:background="@android:color/holo_green_dark"
                 android:textColor="@android:color/white"
-                tools:text="订购更多" />
+                android:text="电话订购" />
+
+            <Button
+                android:id="@+id/btn_subscribe_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@android:color/holo_green_dark"
+                android:textColor="@android:color/white"
+                android:text="联系邮箱" />
 
             <Button
                 android:id="@+id/btn_delete_goods"
@@ -89,7 +121,7 @@
                 android:layout_margin="8dp"
                 android:background="@android:color/holo_red_dark"
                 android:textColor="@android:color/white"
-                tools:text="删除商品" />
+                android:text="删除商品" />
 
         </LinearLayout>
 
