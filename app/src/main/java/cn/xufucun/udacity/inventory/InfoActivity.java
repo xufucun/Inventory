@@ -33,6 +33,8 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private int quantity;
 
+    private static Toast mToast=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,9 +124,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+                showToast("删除失败");
             } else {
-                Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
+                showToast("删除成功");
             }
         }
         finish();
@@ -155,9 +157,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,quantity);
         int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
         if (rowsAffected == 0) {
-            Toast.makeText(this, "修改失败", Toast.LENGTH_SHORT).show();
+            showToast("修改失败");
         } else {
-            Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            showToast("修改成功");
         }
     }
 
@@ -209,5 +211,14 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
             default:
                 break;
         }
+    }
+
+    private void showToast(String msg){
+        if(mToast==null){
+            mToast=Toast.makeText(this,msg,Toast.LENGTH_SHORT);
+        }else{
+            mToast.setText(msg);
+        }
+        mToast.show();
     }
 }

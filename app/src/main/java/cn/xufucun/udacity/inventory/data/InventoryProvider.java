@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import cn.xufucun.udacity.inventory.data.InventoryContract.InventoryEntry;
 
@@ -20,9 +21,7 @@ public class InventoryProvider extends ContentProvider{
     private static final String TAG = "InventoryProvider";
 
     private static final int INVENTORYS = 100;
-
     private static final int INVENTORY_ID = 101;
-
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -124,49 +123,25 @@ public class InventoryProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case INVENTORYS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateGoods(uri, contentValues, selection, selectionArgs);
             case INVENTORY_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateGoods(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-
-
+    /**
+     * 添加新数据
+     * @param uri uri
+     * @param values 新的数据
+     * @return
+     */
     private Uri insertGoods(Uri uri, ContentValues values) {
 
-        String gName = values.getAsString(InventoryEntry.COLUMN_INVENTORY_NAME);
-        if (gName == null) {
-            throw new IllegalArgumentException("名称输入有误");
-        }
-
-        Integer gQUantity = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
-        if (gQUantity == null) {
-            throw new IllegalArgumentException("数量输入有误");
-        }
-
-        Integer gPrice = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
-        if (gPrice == null) {
-            throw new IllegalArgumentException("价格输入有误");
-        }
-
-
-        String sName = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_NAME);
-        if (sName == null) {
-            throw new IllegalArgumentException("供应输入有误");
-        }
-
-        String sPhoneNumber = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-        if (sPhoneNumber == null) {
-            throw new IllegalArgumentException("电话输入有误");
-        }
-
-
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
         long id = database.insert(InventoryEntry.TABLE_NAME, null, values);
         if (id == -1) {
             Log.e(TAG, "Failed to insert row for " + uri);
@@ -174,57 +149,25 @@ public class InventoryProvider extends ContentProvider{
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-
         return ContentUris.withAppendedId(uri, id);
     }
 
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
-        if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_NAME)) {
-            String name = values.getAsString(InventoryEntry.COLUMN_INVENTORY_NAME);
-            if (name == null) {
-                throw new IllegalArgumentException("名称输入有误");
-            }
-        }
-
-        if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_QUANTITY)) {
-            Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
-            if (quantity == null) {
-                throw new IllegalArgumentException("数量输入有误");
-            }
-        }
-
-        if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_PRICE)) {
-            Integer price = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
-            if (price == null ) {
-                throw new IllegalArgumentException("价格输入有误");
-            }
-        }
-
-
-        if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_NAME)) {
-            String name = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_NAME);
-            if (name == null ) {
-                throw new IllegalArgumentException("供应商输入有误");
-            }
-        }
-
-        if (values.containsKey(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
-            String phone = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-            if (phone == null ) {
-                throw new IllegalArgumentException("电话输入有误");
-            }
-        }
-
+    /**
+     *  更新数据库
+     * @param uri uri
+     * @param values 更新的数据
+     * @param selection 更新条件
+     * @param selectionArgs 更新条件中的参数
+     * @return rowsUpdated
+     */
+    private int updateGoods(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         if (values.size() == 0) {
             return 0;
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
         int rowsUpdated = database.update(InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
-
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

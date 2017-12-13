@@ -31,7 +31,7 @@ public final class InventoryContract {
         public final static String _ID = BaseColumns._ID;  //ID INTEGER
         public final static String COLUMN_INVENTORY_NAME ="name"; //商品名称 TEXT
         public final static String COLUMN_INVENTORY_QUANTITY ="quantity";//数量 INTEGER
-        public final static String COLUMN_INVENTORY_PRICE ="price";//单价 INTEGER
+        public final static String COLUMN_INVENTORY_PRICE ="price";//单价 TEXT
         public final static String COLUMN_SUPPLIER_NAME ="supplier";//供应商 TEXT
         public final static String COLUMN_SUPPLIER_PHONE_NUMBER ="phoneNumber"; //手机号 TEXT
     }

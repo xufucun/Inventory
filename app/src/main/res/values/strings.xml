@@ -5,6 +5,7 @@
     <string name="goods_price">商品单价</string>
     <string name="yuan">元</string>
     <string name="goods_quantity">商品数量</string>
+    <string name="goods_quantity_hint">商品数量(选填)</string>
     <string name="goods_barcode">商品编码</string>
     <string name="supplier_info">供应商信息</string>
     <string name="supplier_name">供应商名称</string>

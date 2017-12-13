@@ -43,7 +43,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String goodsQuantity = cursor.getString(quantityColumnIndex);
 
         DecimalFormat df   = new DecimalFormat("#.00");
-        String price = df.format(Float.valueOf(goodsPrice)/100);
+        String price = df.format(Float.valueOf(goodsPrice));
 
         tvGoodsName.setText(goodsName);
         tvGoodsPrice.setText("价格："+price);

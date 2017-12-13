@@ -61,11 +61,8 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         String supplierNameString = editorBinding.editSupplierName.getText().toString().trim();
         String supplierPhoneNumber = editorBinding.editSupplierPhoneNumber.getText().toString().trim();
 
-        if (mCurrentUri == null
-                &&goodsNameString.isEmpty()
-                &&goodsQuantityString.isEmpty()
-                &&supplierNameString.isEmpty()
-                &&supplierPhoneNumber.isEmpty()){
+        if (goodsNameString.isEmpty() ||goodsQuantityString.isEmpty() ||supplierNameString.isEmpty() ||supplierPhoneNumber.isEmpty()){
+            Toast.makeText(this, "输入有误，请重新输入", Toast.LENGTH_SHORT).show();//不明白，这里的Toast前面为什么会有应用名称？
             return;
         }
 
@@ -73,7 +70,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_INVENTORY_NAME, goodsNameString);
-        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, Float.valueOf(goodsQuantityString)*100);
+        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, goodsQuantityString);
         values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, goodsPriceString);
 
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
@@ -131,13 +128,13 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
             String gName = cursor.getString(gNameColumnIndex);
             int gQuantity = cursor.getInt(gQuantityColumnIndex);
-            int gPrice = cursor.getInt(gPriceColumnIndex);
+            String gPrice = cursor.getString(gPriceColumnIndex);
             String sName = cursor.getString(sNameColumnIndex);
             String sPhoneNuber = cursor.getString(sPhoneNuberColumnIndex);
 
             editorBinding.editGoodsName.setText(gName);
             editorBinding.editGoodsQuantity.setText(String.valueOf(gQuantity));
-            editorBinding.editGoodsPrice.setText(String.valueOf(gPrice));
+            editorBinding.editGoodsPrice.setText(gPrice);
             editorBinding.editSupplierName.setText(sName);
             editorBinding.editSupplierPhoneNumber.setText(sPhoneNuber);
 
