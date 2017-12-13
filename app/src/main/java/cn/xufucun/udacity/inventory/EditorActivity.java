@@ -62,7 +62,8 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         String supplierPhoneNumber = editorBinding.editSupplierPhoneNumber.getText().toString().trim();
 
         if (goodsNameString.isEmpty() ||goodsQuantityString.isEmpty() ||supplierNameString.isEmpty() ||supplierPhoneNumber.isEmpty()){
-            Toast.makeText(this, "输入有误，请重新输入", Toast.LENGTH_SHORT).show();//不明白，这里的Toast前面为什么会有应用名称？
+            //TODO 不明白，这里的Toast前面为什么会有应用名称？
+            Toast.makeText(this, "输入有误，请重新输入", Toast.LENGTH_SHORT).show();
             return;
         }
 
