@@ -38,10 +38,10 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         mCurrentUri = intent.getData();
 
         if (mCurrentUri == null) {
-            setTitle("添加新数据");
+            setTitle(getString(R.string.add_new_data));
             invalidateOptionsMenu();
         } else {
-            setTitle("修改数据");
+            setTitle(getString(R.string.change_data));
             getLoaderManager().initLoader(EXISTING_LOADER, null, this);
         }
 
@@ -54,7 +54,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
     }
 
 
-    private void saveGoods() {
+    private boolean saveGoods() {
         String goodsNameString = editorBinding.editGoodsName.getText().toString().trim();
         String goodsQuantityString = editorBinding.editGoodsQuantity.getText().toString().trim();
         String goodsPriceString = editorBinding.editGoodsPrice.getText().toString().trim();
@@ -62,40 +62,42 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         String supplierPhoneNumber = editorBinding.editSupplierPhoneNumber.getText().toString().trim();
 
         if (goodsNameString.isEmpty() ||goodsQuantityString.isEmpty() ||supplierNameString.isEmpty() ||supplierPhoneNumber.isEmpty()){
-            //TODO 不明白，这里的Toast前面为什么会有应用名称？
-            Toast.makeText(this, "输入有误，请重新输入", Toast.LENGTH_SHORT).show();
-            return;
+            Toast.makeText(this, R.string.enter_error, Toast.LENGTH_SHORT).show(); //很奇怪
+            return false;
+        }
+
+        if (goodsPriceString.length() >= 10){
+            Toast.makeText(this, R.string.enter_price_error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (goodsQuantityString.length() >= 10){
+            Toast.makeText(this, R.string.enter_quantity_error, Toast.LENGTH_SHORT).show();
+            return false;
         }
 
 
-
-        ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_INVENTORY_NAME, goodsNameString);
-        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, goodsQuantityString);
-        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, goodsPriceString);
-
-        values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-        values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
-
+        ContentValues values = getInventoryValues(goodsNameString,goodsQuantityString,goodsPriceString,supplierNameString,supplierPhoneNumber);
 
         if (mCurrentUri == null){
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
             if (newUri == null) {
-                Toast.makeText(this, "添加失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.add_fild, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.add_success, Toast.LENGTH_SHORT).show();
             }
         }else {
 
             int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
 
             if (rowsAffected == 0) {
-                Toast.makeText(this, "修改失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.change_fild, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.chang_success, Toast.LENGTH_SHORT).show();
             }
         }
 
+        return true;
     }
 
 
@@ -170,14 +172,14 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
     private void showUnsavedChangesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("未保存，要退出吗?");
-        builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.quiet_msg);
+        builder.setPositiveButton(R.string.quit_text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
         });
-        builder.setNegativeButton("继续编辑", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.continue_editing, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (dialog != null) {
                     dialog.dismiss();
@@ -208,8 +210,9 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveGoods();
-                finish();
+                if (saveGoods()){
+                    finish();
+                }
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -227,13 +230,13 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("删除提示");
-        builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.delete_msg);
+        builder.setPositiveButton(R.string.delete_text, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteGoods();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (dialog != null) {
                     dialog.dismiss();
@@ -249,11 +252,34 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.delete_fild, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.delete_success, Toast.LENGTH_SHORT).show();
             }
         }
         finish();
     }
+
+
+    /**
+     * 创建 values
+     * @param name 货物名称
+     * @param quantity 数量
+     * @param price 价格
+     * @param sName 供应商
+     * @param phone 手机号
+     * @return
+     */
+   private ContentValues getInventoryValues(String name,String quantity,String price,String sName ,String phone){
+
+       ContentValues values = new ContentValues();
+       values.put(InventoryEntry.COLUMN_INVENTORY_NAME, name);
+       values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantity);
+       values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, price);
+       values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, sName);
+       values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER, phone);
+
+       return values;
+   }
+
 }

@@ -46,8 +46,15 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String price = df.format(Float.valueOf(goodsPrice));
 
         tvGoodsName.setText(goodsName);
-        tvGoodsPrice.setText("价格："+price);
-        tvGoodsQuantity.setText("剩余数量："+goodsQuantity);
+
+        String s1 = context.getString(R.string.list_price);
+        String gPrice = String.format(s1,price);
+
+        String s2 = context.getString(R.string.list_quantity);
+        String gQuantity = String.format(s2,goodsQuantity);
+
+        tvGoodsPrice.setText(gPrice);
+        tvGoodsQuantity.setText(gQuantity);
 
     }
 }

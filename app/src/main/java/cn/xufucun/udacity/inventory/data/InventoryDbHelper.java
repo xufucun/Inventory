@@ -16,14 +16,14 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "shelter.db";
 
     //数据库版本
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // 创建一个包含SQL语句的字符串来创建账单
     private String SQL_CREATE_BILLS_TABLE = "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
             + InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + InventoryEntry.COLUMN_INVENTORY_NAME + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_INVENTORY_QUANTITY + " INTEGER DEFAULT 0, "
-            + InventoryEntry.COLUMN_INVENTORY_PRICE + " TEXT NOT NULL, " //还是改成TEXT吧，万一价格很贵呢
+            + InventoryEntry.COLUMN_INVENTORY_PRICE + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL);";
 

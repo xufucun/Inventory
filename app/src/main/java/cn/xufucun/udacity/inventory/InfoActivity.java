@@ -13,6 +13,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -134,6 +135,7 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void dialogEditQuantity(){
         final EditText editText = new EditText(this);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);//只能输入数字
         AlertDialog.Builder inputDialog = new AlertDialog.Builder(this);
         inputDialog.setTitle("输入要修改的数量").setView(editText);
         inputDialog.setPositiveButton("确定",
