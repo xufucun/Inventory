@@ -32,7 +32,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        editorBinding = DataBindingUtil.setContentView(this,R.layout.activity_editor);
+        editorBinding = DataBindingUtil.setContentView(this, R.layout.activity_editor);
 
         Intent intent = getIntent();
         mCurrentUri = intent.getData();
@@ -61,39 +61,43 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         String supplierNameString = editorBinding.editSupplierName.getText().toString().trim();
         String supplierPhoneNumber = editorBinding.editSupplierPhoneNumber.getText().toString().trim();
 
-        if (goodsNameString.isEmpty() ||goodsQuantityString.isEmpty() ||supplierNameString.isEmpty() ||supplierPhoneNumber.isEmpty()){
-            Toast.makeText(this, R.string.enter_error, Toast.LENGTH_SHORT).show(); //很奇怪
+        if (goodsNameString.isEmpty()
+                ||goodsQuantityString.isEmpty()
+                || goodsPriceString.isEmpty()
+                || supplierNameString.isEmpty()
+                || supplierPhoneNumber.isEmpty()) {
+            ToastUtil.show(this, getString(R.string.enter_error));
             return false;
         }
 
-        if (goodsPriceString.length() >= 10){
-            Toast.makeText(this, R.string.enter_price_error, Toast.LENGTH_SHORT).show();
+        if (goodsPriceString.length() >= 10) {
+            ToastUtil.show(this, getString(R.string.enter_price_error));
             return false;
         }
 
-        if (goodsQuantityString.length() >= 10){
-            Toast.makeText(this, R.string.enter_quantity_error, Toast.LENGTH_SHORT).show();
+        if (goodsQuantityString.length() >= 10) {
+            ToastUtil.show(this, getString(R.string.enter_quantity_error));
             return false;
         }
 
 
-        ContentValues values = getInventoryValues(goodsNameString,goodsQuantityString,goodsPriceString,supplierNameString,supplierPhoneNumber);
+        ContentValues values = getInventoryValues(goodsNameString, goodsQuantityString, goodsPriceString, supplierNameString, supplierPhoneNumber);
 
-        if (mCurrentUri == null){
+        if (mCurrentUri == null) {
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
             if (newUri == null) {
-                Toast.makeText(this, R.string.add_fild, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.add_fild));
             } else {
-                Toast.makeText(this, R.string.add_success, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.add_success));
             }
-        }else {
+        } else {
 
             int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
 
             if (rowsAffected == 0) {
-                Toast.makeText(this, R.string.change_fild, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.change_fild));
             } else {
-                Toast.makeText(this, R.string.chang_success, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.chang_success));
             }
         }
 
@@ -210,7 +214,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                if (saveGoods()){
+                if (saveGoods()) {
                     finish();
                 }
                 return true;
@@ -252,9 +256,9 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                Toast.makeText(this, R.string.delete_fild, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.delete_fild));
             } else {
-                Toast.makeText(this, R.string.delete_success, Toast.LENGTH_SHORT).show();
+                ToastUtil.show(this, getString(R.string.delete_success));
             }
         }
         finish();
@@ -263,23 +267,24 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
     /**
      * 创建 values
-     * @param name 货物名称
+     *
+     * @param name     货物名称
      * @param quantity 数量
-     * @param price 价格
-     * @param sName 供应商
-     * @param phone 手机号
+     * @param price    价格
+     * @param sName    供应商
+     * @param phone    手机号
      * @return
      */
-   private ContentValues getInventoryValues(String name,String quantity,String price,String sName ,String phone){
+    private ContentValues getInventoryValues(String name, String quantity, String price, String sName, String phone) {
 
-       ContentValues values = new ContentValues();
-       values.put(InventoryEntry.COLUMN_INVENTORY_NAME, name);
-       values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantity);
-       values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, price);
-       values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, sName);
-       values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER, phone);
+        ContentValues values = new ContentValues();
+        values.put(InventoryEntry.COLUMN_INVENTORY_NAME, name);
+        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantity);
+        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, price);
+        values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, sName);
+        values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER, phone);
 
-       return values;
-   }
+        return values;
+    }
 
 }

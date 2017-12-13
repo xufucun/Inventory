@@ -16,8 +16,8 @@
     <string name="btn_editor">编辑</string>
     <string name="btn_subscribe">订购更多</string>
     <string name="btn_delete_goods">删除商品</string>
-    <string name="list_price">价格：1%s</string>
-    <string name="list_quantity">剩余数量：1%s</string>
+    <string name="list_price">价格：%1$s</string>
+    <string name="list_quantity">剩余数量：%1$s</string>
     <string name="add_new_data">添加新数据</string>
     <string name="change_data">修改数据</string>
     <string name="enter_error">输入有误，请重新输入</string>
@@ -36,4 +36,6 @@
     <string name="cancel">取消</string>
     <string name="delete_fild">删除失败</string>
     <string name="delete_success">删除成功</string>
+    <string name="inptu_number">输入要修改的数量</string>
+    <string name="chaneg_success">修改成功</string>
 </resources>

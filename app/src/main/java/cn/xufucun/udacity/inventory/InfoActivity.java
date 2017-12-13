@@ -34,8 +34,6 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private int quantity;
 
-    private static Toast mToast=null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,9 +123,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                showToast("删除失败");
+                ToastUtil.show(this,getString(R.string.delete_fild));
             } else {
-                showToast("删除成功");
+                ToastUtil.show(this,getString(R.string.delete_success));
             }
         }
         finish();
@@ -137,12 +135,12 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         final EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);//只能输入数字
         AlertDialog.Builder inputDialog = new AlertDialog.Builder(this);
-        inputDialog.setTitle("输入要修改的数量").setView(editText);
+        inputDialog.setTitle(R.string.inptu_number).setView(editText);
         inputDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
+
                         int q  = Integer.valueOf(editText.getText().toString());
                         editQuantity(q);
                     }
@@ -159,9 +157,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,quantity);
         int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
         if (rowsAffected == 0) {
-            showToast("修改失败");
+            ToastUtil.show(this,getString(R.string.change_fild));
         } else {
-            showToast("修改成功");
+            ToastUtil.show(this,getString(R.string.chaneg_success));
         }
     }
 
@@ -215,12 +213,4 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    private void showToast(String msg){
-        if(mToast==null){
-            mToast=Toast.makeText(this,msg,Toast.LENGTH_SHORT);
-        }else{
-            mToast.setText(msg);
-        }
-        mToast.show();
-    }
 }
