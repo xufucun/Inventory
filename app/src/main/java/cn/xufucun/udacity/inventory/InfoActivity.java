@@ -141,8 +141,11 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        int q  = Integer.valueOf(editText.getText().toString());
-                        editQuantity(q);
+                        if(isVaildNumber(editText.getText().toString().trim())){
+                            int q  = Integer.valueOf(editText.getText().toString().trim());
+                            editQuantity(q);
+                        }
+
                     }
                 }).show();
     }
@@ -161,6 +164,10 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         } else {
             ToastUtil.show(this,getString(R.string.chaneg_success));
         }
+    }
+
+    private boolean isVaildNumber(String number) {
+        return !number.equals("") ;
     }
 
 
