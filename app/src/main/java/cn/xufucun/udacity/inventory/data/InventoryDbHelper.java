@@ -21,6 +21,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     // 创建一个包含SQL语句的字符串来创建账单
     private String SQL_CREATE_BILLS_TABLE = "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
             + InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + InventoryEntry.COLUMN_INVENTORY_IMAGE + " BLOB, "
             + InventoryEntry.COLUMN_INVENTORY_NAME + " TEXT NOT NULL, "
             + InventoryEntry.COLUMN_INVENTORY_QUANTITY + " INTEGER DEFAULT 0, "
             + InventoryEntry.COLUMN_INVENTORY_PRICE + " TEXT NOT NULL, "

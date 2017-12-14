@@ -29,6 +29,7 @@ public final class InventoryContract {
         public final static String TABLE_NAME = "inventory";
 
         public final static String _ID = BaseColumns._ID;  //ID INTEGER
+        public final static String COLUMN_INVENTORY_IMAGE = "img"; //商品图片
         public final static String COLUMN_INVENTORY_NAME ="name"; //商品名称 TEXT
         public final static String COLUMN_INVENTORY_QUANTITY ="quantity";//数量 INTEGER
         public final static String COLUMN_INVENTORY_PRICE ="price";//单价 TEXT

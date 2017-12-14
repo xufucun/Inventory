@@ -2,7 +2,6 @@ package cn.xufucun.udacity.inventory;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -18,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import cn.xufucun.udacity.inventory.data.InventoryContract;
 import cn.xufucun.udacity.inventory.databinding.ActivityInfoBinding;
@@ -123,9 +121,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                ToastUtil.show(this,getString(R.string.delete_fild));
+                Utils.show(this,getString(R.string.delete_fild));
             } else {
-                ToastUtil.show(this,getString(R.string.delete_success));
+                Utils.show(this,getString(R.string.delete_success));
             }
         }
         finish();
@@ -160,9 +158,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,quantity);
         int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
         if (rowsAffected == 0) {
-            ToastUtil.show(this,getString(R.string.change_fild));
+            Utils.show(this,getString(R.string.change_fild));
         } else {
-            ToastUtil.show(this,getString(R.string.chaneg_success));
+            Utils.show(this,getString(R.string.chaneg_success));
         }
     }
 

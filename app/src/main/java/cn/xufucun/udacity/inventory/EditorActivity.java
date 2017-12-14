@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import cn.xufucun.udacity.inventory.data.InventoryContract.InventoryEntry;
 import cn.xufucun.udacity.inventory.databinding.ActivityEditorBinding;
@@ -55,6 +54,8 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
 
     private boolean saveGoods() {
+
+        //TODO 图片
         String goodsNameString = editorBinding.editGoodsName.getText().toString().trim();
         String goodsQuantityString = editorBinding.editGoodsQuantity.getText().toString().trim();
         String goodsPriceString = editorBinding.editGoodsPrice.getText().toString().trim();
@@ -66,17 +67,17 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
                 || goodsPriceString.isEmpty()
                 || supplierNameString.isEmpty()
                 || supplierPhoneNumber.isEmpty()) {
-            ToastUtil.show(this, getString(R.string.enter_error));
+            Utils.show(this, getString(R.string.enter_error));
             return false;
         }
 
         if (goodsPriceString.length() >= 10) {
-            ToastUtil.show(this, getString(R.string.enter_price_error));
+            Utils.show(this, getString(R.string.enter_price_error));
             return false;
         }
 
         if (goodsQuantityString.length() >= 10) {
-            ToastUtil.show(this, getString(R.string.enter_quantity_error));
+            Utils.show(this, getString(R.string.enter_quantity_error));
             return false;
         }
 
@@ -86,18 +87,18 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         if (mCurrentUri == null) {
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
             if (newUri == null) {
-                ToastUtil.show(this, getString(R.string.add_fild));
+                Utils.show(this, getString(R.string.add_fild));
             } else {
-                ToastUtil.show(this, getString(R.string.add_success));
+                Utils.show(this, getString(R.string.add_success));
             }
         } else {
 
             int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
 
             if (rowsAffected == 0) {
-                ToastUtil.show(this, getString(R.string.change_fild));
+                Utils.show(this, getString(R.string.change_fild));
             } else {
-                ToastUtil.show(this, getString(R.string.chang_success));
+                Utils.show(this, getString(R.string.chang_success));
             }
         }
 
@@ -256,9 +257,9 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                ToastUtil.show(this, getString(R.string.delete_fild));
+                Utils.show(this, getString(R.string.delete_fild));
             } else {
-                ToastUtil.show(this, getString(R.string.delete_success));
+                Utils.show(this, getString(R.string.delete_success));
             }
         }
         finish();
