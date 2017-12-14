@@ -53,4 +53,5 @@
         android:textSize="18sp"
         tools:text="100"/>
 
+    <!--滑动删除？-->
 </LinearLayout>
