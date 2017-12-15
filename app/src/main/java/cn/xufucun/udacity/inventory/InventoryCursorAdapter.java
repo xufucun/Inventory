@@ -40,7 +40,6 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         TextView tvGoodsQuantity = view.findViewById(R.id.tv_goods_quantity);
 
-
         int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_IMAGE);
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
@@ -52,9 +51,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String goodsPrice = cursor.getString(priceColumnIndex);
         String goodsQuantity = cursor.getString(quantityColumnIndex);
 
-
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(goodsImage,0,goodsImage.length);
-
 
         DecimalFormat df   = new DecimalFormat("#.00");
         String price = df.format(Float.valueOf(goodsPrice));
