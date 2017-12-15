@@ -17,7 +17,7 @@
     <string name="btn_subscribe">订购更多</string>
     <string name="btn_delete_goods">删除商品</string>
     <string name="list_price">价格：%1$s</string>
-    <string name="list_quantity">剩余数量：%1$s</string>
+    <string name="list_quantity">数量：%1$s</string>
     <string name="add_new_data">添加新数据</string>
     <string name="change_data">修改数据</string>
     <string name="enter_error">输入有误，请重新输入</string>

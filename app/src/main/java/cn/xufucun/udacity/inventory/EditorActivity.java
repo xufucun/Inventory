@@ -77,8 +77,8 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
     private boolean saveGoods() {
 
-        //TODO 图片
-//        byte[] goodsImageDrawable = editorBinding.upImg.
+        BitmapDrawable bd = (BitmapDrawable)editorBinding.upImg.getDrawable();
+
         String goodsNameString = editorBinding.editGoodsName.getText().toString().trim();
         String goodsQuantityString = editorBinding.editGoodsQuantity.getText().toString().trim();
         String goodsPriceString = editorBinding.editGoodsPrice.getText().toString().trim();
@@ -94,6 +94,11 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
             return false;
         }
 
+        if (bd == null){
+            Utils.showToast(this,"请上传一张商品图片");
+            return false;
+        }
+
         if (goodsPriceString.length() >= 10) {
             Utils.showToast(this, getString(R.string.enter_price_error));
             return false;
@@ -104,8 +109,6 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
             return false;
         }
 
-
-        BitmapDrawable bd = (BitmapDrawable)editorBinding.upImg.getDrawable();
         Bitmap bitmap = bd.getBitmap();
 
         ContentValues values = getInventoryValues(bitmap,goodsNameString, goodsQuantityString, goodsPriceString, supplierNameString, supplierPhoneNumber);
