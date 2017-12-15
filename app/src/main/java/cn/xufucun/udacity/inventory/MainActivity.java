@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //需要的列
         String[] projection = {
                 InventoryEntry._ID,
+                InventoryEntry.COLUMN_INVENTORY_IMAGE,
                 InventoryEntry.COLUMN_INVENTORY_NAME,
                 InventoryEntry.COLUMN_INVENTORY_QUANTITY,
                 InventoryEntry.COLUMN_INVENTORY_PRICE};

@@ -14,13 +14,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageView
                 android:id="@+id/up_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
                 android:layout_margin="@dimen/margin_8dp"
-                android:background="@drawable/circle"
-                android:text="添加\n图片"/>
+                android:background="@android:color/darker_gray"/>
 
             <LinearLayout
                 android:layout_width="0dp"

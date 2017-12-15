@@ -121,9 +121,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                Utils.show(this,getString(R.string.delete_fild));
+                Utils.showToast(this,getString(R.string.delete_fild));
             } else {
-                Utils.show(this,getString(R.string.delete_success));
+                Utils.showToast(this,getString(R.string.delete_success));
             }
         }
         finish();
@@ -158,9 +158,9 @@ public class InfoActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_INVENTORY_QUANTITY,quantity);
         int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
         if (rowsAffected == 0) {
-            Utils.show(this,getString(R.string.change_fild));
+            Utils.showToast(this,getString(R.string.change_fild));
         } else {
-            Utils.show(this,getString(R.string.chaneg_success));
+            Utils.showToast(this,getString(R.string.chaneg_success));
         }
     }
 

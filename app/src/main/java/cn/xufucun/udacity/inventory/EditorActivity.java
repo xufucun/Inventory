@@ -2,6 +2,7 @@ package cn.xufucun.udacity.inventory;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -9,24 +10,43 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import cn.xufucun.udacity.inventory.data.InventoryContract.InventoryEntry;
 import cn.xufucun.udacity.inventory.databinding.ActivityEditorBinding;
 
-public class EditorActivity extends AppCompatActivity implements View.OnTouchListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class EditorActivity extends AppCompatActivity implements View.OnTouchListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private ActivityEditorBinding editorBinding;
     private static final int EXISTING_LOADER = 0;
     private Uri mCurrentUri;
     private boolean mGoodsHasChanged = false;
+
+    private final static int TAKE_PHOTO_REQUEST = 101;
+    private final static int CHOOSE_PHOTO_REQUEST = 102;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +70,15 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         editorBinding.editSupplierName.setOnTouchListener(this);
         editorBinding.editSupplierPhoneNumber.setOnTouchListener(this);
 
+        editorBinding.upImg.setOnClickListener(this);
+
     }
 
 
     private boolean saveGoods() {
 
         //TODO 图片
+//        byte[] goodsImageDrawable = editorBinding.upImg.
         String goodsNameString = editorBinding.editGoodsName.getText().toString().trim();
         String goodsQuantityString = editorBinding.editGoodsQuantity.getText().toString().trim();
         String goodsPriceString = editorBinding.editGoodsPrice.getText().toString().trim();
@@ -67,38 +90,41 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
                 || goodsPriceString.isEmpty()
                 || supplierNameString.isEmpty()
                 || supplierPhoneNumber.isEmpty()) {
-            Utils.show(this, getString(R.string.enter_error));
+            Utils.showToast(this, getString(R.string.enter_error));
             return false;
         }
 
         if (goodsPriceString.length() >= 10) {
-            Utils.show(this, getString(R.string.enter_price_error));
+            Utils.showToast(this, getString(R.string.enter_price_error));
             return false;
         }
 
         if (goodsQuantityString.length() >= 10) {
-            Utils.show(this, getString(R.string.enter_quantity_error));
+            Utils.showToast(this, getString(R.string.enter_quantity_error));
             return false;
         }
 
 
-        ContentValues values = getInventoryValues(goodsNameString, goodsQuantityString, goodsPriceString, supplierNameString, supplierPhoneNumber);
+        BitmapDrawable bd = (BitmapDrawable)editorBinding.upImg.getDrawable();
+        Bitmap bitmap = bd.getBitmap();
+
+        ContentValues values = getInventoryValues(bitmap,goodsNameString, goodsQuantityString, goodsPriceString, supplierNameString, supplierPhoneNumber);
 
         if (mCurrentUri == null) {
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
             if (newUri == null) {
-                Utils.show(this, getString(R.string.add_fild));
+                Utils.showToast(this, getString(R.string.add_fild));
             } else {
-                Utils.show(this, getString(R.string.add_success));
+                Utils.showToast(this, getString(R.string.add_success));
             }
         } else {
 
             int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
 
             if (rowsAffected == 0) {
-                Utils.show(this, getString(R.string.change_fild));
+                Utils.showToast(this, getString(R.string.change_fild));
             } else {
-                Utils.show(this, getString(R.string.chang_success));
+                Utils.showToast(this, getString(R.string.chang_success));
             }
         }
 
@@ -111,6 +137,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
         String[] projection = {
                 InventoryEntry._ID,
+                InventoryEntry.COLUMN_INVENTORY_IMAGE,
                 InventoryEntry.COLUMN_INVENTORY_NAME,
                 InventoryEntry.COLUMN_INVENTORY_QUANTITY,
                 InventoryEntry.COLUMN_INVENTORY_PRICE,
@@ -128,18 +155,23 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
 
         if (cursor.moveToFirst()) {
 
+            int gImageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_IMAGE);
             int gNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
             int gQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
             int gPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
             int sNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
             int sPhoneNuberColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
 
+            byte[] gImg = cursor.getBlob(gImageColumnIndex);
             String gName = cursor.getString(gNameColumnIndex);
             int gQuantity = cursor.getInt(gQuantityColumnIndex);
             String gPrice = cursor.getString(gPriceColumnIndex);
             String sName = cursor.getString(sNameColumnIndex);
             String sPhoneNuber = cursor.getString(sPhoneNuberColumnIndex);
 
+            ByteArrayInputStream stream = new ByteArrayInputStream(gImg);
+
+            editorBinding.upImg.setImageDrawable(Drawable.createFromStream(stream, "img"));
             editorBinding.editGoodsName.setText(gName);
             editorBinding.editGoodsQuantity.setText(String.valueOf(gQuantity));
             editorBinding.editGoodsPrice.setText(gPrice);
@@ -257,9 +289,9 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         if (mCurrentUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
-                Utils.show(this, getString(R.string.delete_fild));
+                Utils.showToast(this, getString(R.string.delete_fild));
             } else {
-                Utils.show(this, getString(R.string.delete_success));
+                Utils.showToast(this, getString(R.string.delete_success));
             }
         }
         finish();
@@ -276,9 +308,12 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
      * @param phone    手机号
      * @return
      */
-    private ContentValues getInventoryValues(String name, String quantity, String price, String sName, String phone) {
+    private ContentValues getInventoryValues(Bitmap bitmap,String name, String quantity, String price, String sName, String phone) {
 
         ContentValues values = new ContentValues();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,byteArrayOutputStream.toByteArray());
         values.put(InventoryEntry.COLUMN_INVENTORY_NAME, name);
         values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantity);
         values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, price);
@@ -288,4 +323,78 @@ public class EditorActivity extends AppCompatActivity implements View.OnTouchLis
         return values;
     }
 
+
+    private void selectImg(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("上传照片");
+        final String[] items = { "拍摄照片","选择图片"};
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, TAKE_PHOTO_REQUEST);
+                                break;
+                            case 1:
+                                Intent intent2 = new Intent();
+                                intent2.setAction(Intent.ACTION_GET_CONTENT);
+                                intent2.setType("image/*");
+                                startActivityForResult(intent2, CHOOSE_PHOTO_REQUEST);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+        builder.show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+
+            case TAKE_PHOTO_REQUEST:
+                if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "取消了拍照", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Bitmap  photo = data.getParcelableExtra("data");
+                editorBinding.upImg.setImageBitmap(photo);
+
+                break;
+
+
+            case CHOOSE_PHOTO_REQUEST:
+                if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "点击取消从相册选择", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                try {
+                    Uri imageUri = data.getData();
+                    Log.e("TAG", imageUri.toString());
+                    editorBinding.upImg.setImageURI(imageUri);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.up_img:
+                selectImg();
+                break;
+        }
+    }
 }

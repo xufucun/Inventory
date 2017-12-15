@@ -22,7 +22,7 @@ public final class Utils {
 
     private static Toast mToast = null;
 
-    public static void show(Context context, String message) {
+    public static void showToast(Context context, String message) {
         if (mToast == null) {
             mToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         } else {

@@ -16,7 +16,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "shelter.db";
 
     //数据库版本
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // 创建一个包含SQL语句的字符串来创建账单
     private String SQL_CREATE_BILLS_TABLE = "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
